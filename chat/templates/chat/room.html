@@ -1,0 +1,31 @@
+<!-- chat/templates/chat/room.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ room.name }} 채팅방</title>
+</head>
+<body>
+    <h1>{{ room.name }} 채팅방</h1>
+    <div id="messages"></div>
+    <input type="text" id="chat-message-input" placeholder="메시지를 입력하세요...">
+    <button id="send-button">전송</button>
+
+    <script>
+        var roomName = "{{ room.name }}";
+        var chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/' + roomName + '/');
+
+        chatSocket.onmessage = function(e) {
+            var data = JSON.parse(e.data);
+            document.querySelector('#messages').innerHTML += '<p>' + data.message + '</p>';
+        };
+
+        document.querySelector('#send-button').onclick = function() {
+            var messageInputDom = document.querySelector('#chat-message-input');
+            var message = messageInputDom.value;
+            chatSocket.send(JSON.stringify({'message': message}));
+            messageInputDom.value = '';
+        };
+    </script>
+</body>
+</html>
