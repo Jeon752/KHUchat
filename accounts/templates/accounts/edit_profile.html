@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Profile</title>
+</head>
+<body>
+    <h1>Edit Your Profile</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}  <!-- 수정 폼 출력 -->
+        <button type="submit">Save Changes</button>
+    </form>
+    <a href="{% url 'accounts:home' %}">Back to Home</a>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>공모전 목록</title>
+</head>
+<body>
+    <h1>공모전 목록</h1>
+    <ul>
+        {% for post in posts %}
+            <li>
+                {% if post.is_admin_post %}
+                    <!-- 관리자 공모전 글 -->
+                    {% if post.image %}
+                        <img src="{{ post.image.url }}" alt="공모전 이미지" style="max-width: 200px;">
+                    {% endif %}
+                    <h2><a href="{% url 'posts:post_detail' post.id %}">{{ post.title }}</a></h2>
+                    <p>{{ post.content|truncatechars:100 }}</p>
+                {% else %}
+                    <!-- 일반 사용자 글 -->
+                    <h3><a href="{% url 'posts:post_detail' post.id %}">{{ post.title }}</a></h3>
+                {% endif %}
+                <p>작성일: {{ post.created_at|date:"Y-m-d H:i" }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
