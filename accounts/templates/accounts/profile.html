@@ -1,7 +1,0 @@
-<h1>{{ profile_user.username }}'s Profile</h1>
-<p>{{ profile_user.bio }}</p>
-<ul>
-    {% for language in profile_user.programming_languages.all %}
-        <li>{{ language.name }}</li>
-    {% endfor %}
-</ul>
