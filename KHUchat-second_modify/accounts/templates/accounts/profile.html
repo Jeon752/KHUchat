@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ profile_user.username }}'s Profile</title>
+</head>
+<body>
+    <h1>Profile of {{ profile_user.username }}</h1>
+    <p>Email: {{ profile_user.email }}</p>
+    <p>Bio: {{ profile_user.bio }}</p> <!-- CustomUser 모델의 bio 필드 -->
+    <p>Programming Languages:</p>
+    <ul>
+        {% for language in profile_user.programming_languages.all %}
+            <li>{{ language.name }}</li> <!-- Assuming ProgrammingLanguage has a name field -->
+        {% empty %}
+            <li>No programming languages selected.</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'accounts:home' %}">Back to Home</a>
+</body>
+</html>

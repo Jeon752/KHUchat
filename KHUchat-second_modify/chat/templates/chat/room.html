@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Main Chat Room</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <h1>Welcome to the Main Chat Room!</h1>
+
+    <!-- Asynchronous message window -->
+    <h2>Previous Messages:</h2>
+    <div id="chat-history-log"></div>
+
+    <!-- Real-time chat window -->
+    <h2>Real-Time Chat:</h2>
+    <div id="chat-log"></div>
+    <input id="chat-message-input" type="text" size="100" placeholder="Type your message here...">
+    <input id="chat-message-submit" type="button" value="Send">
+
+    <script>
+        // Load previous messages
+        fetch('/chat/load_messages/')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("HTTP error " + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                data.messages.forEach(msg => {
+                    const senderProfileUrl = `/accounts/profile/${msg.sender}/`; // 상대방 프로필 URL
+                    document.querySelector('#chat-history-log').innerHTML += `
+                        <p>
+                            <strong><a href="${senderProfileUrl}" target="_blank">${msg.sender}</a></strong>: 
+                            ${msg.content} 
+                            <em>${msg.timestamp}</em>
+                        </p>`;
+                });
+            });
+    
+        // WebSocket for real-time chat
+        const chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/');
+    
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            const senderProfileUrl = `/accounts/profile/${data.username}/`; // 상대방 프로필 URL
+            document.querySelector('#chat-log').innerHTML += `
+                <p>
+                    <strong><a href="${senderProfileUrl}" target="_blank">${data.username}</a></strong>: 
+                    ${data.message}
+                </p>`;
+        };
+    
+        // Function to send message
+        const sendMessage = () => {
+            const messageInputDom = document.querySelector('#chat-message-input');
+            const message = messageInputDom.value.trim();
+            if (message) {
+                chatSocket.send(JSON.stringify({ 'message': message }));
+                messageInputDom.value = ''; // Clear input field
+            }
+        };
+    
+        // Add event listener for Enter key
+        document.querySelector('#chat-message-input').addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Prevent default form submission
+                sendMessage();
+            }
+        });
+    
+        // Add event listener for Send button
+        document.querySelector('#chat-message-submit').onclick = sendMessage;
+    </script>
+</body>
+</html>

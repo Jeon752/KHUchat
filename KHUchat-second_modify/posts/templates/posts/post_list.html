@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>공모전 목록</title>
+</head>
+<body>
+    <h1>공모전 목록</h1>
+    <a href="{% url 'accounts:home' %}">홈으로 이동</a>
+    <ul>
+        {% for post in posts %}
+            <li>
+                <h2><a href="{% url 'posts:post_detail' post.id %}">{{ post.title }}</a></h2>
+                {% if post.is_admin_post %}
+                    <strong>[관리자 작성]</strong>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

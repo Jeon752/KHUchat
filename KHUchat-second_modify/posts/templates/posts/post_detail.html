@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ post.title }}</title>
+</head>
+<body>
+    <h1>{{ post.title }}</h1>
+    {% if post.image %}
+        <img src="{{ post.image.url }}" alt="공모전 이미지">
+    {% endif %}
+    <p>{{ post.content }}</p>
+    <p>작성자: {{ post.author }}</p>
+    <p>작성일: {{ post.created_at|date:"Y-m-d H:i" }}</p>
+    <p>{{ post.content|safe }}</p> <!-- safe 필터로 HTML 태그 렌더링 -->
+
+    <a href="{% url 'posts:post_list' %}">목록으로 돌아가기</a>
+</body>
+</html>

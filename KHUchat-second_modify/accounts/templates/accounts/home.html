@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+</head>
+<body>
+    <h1>Welcome, {{ user.username }}</h1>
+
+    <!-- 메인 채팅방으로 연결 -->
+    <h2><a href="{% url 'chat:room' %}">Enter Main Chat Room</a></h2>
+
+    <!-- 공모전 관련 링크 -->
+    <h2><a href="{% url 'posts:post_list' %}">공모전 찾아보기</a></h2>
+    <h2><a href="{% url 'posts:post_create' %}">공모전 공고 올리기</a></h2>
+
+    <!-- 프로필 관리 링크 -->
+    <h3><a href="{% url 'accounts:profile' request.user.username %}">내 프로필</a></h3>
+    <h3><a href="{% url 'accounts:edit_profile' %}">Edit My Profile</a></h3>
+</body>
+</html>
